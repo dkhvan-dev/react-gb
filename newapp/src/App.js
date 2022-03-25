@@ -1,19 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
-import React from 'react';
-import { Message } from './components/Message/Message';
+import logo from "./logo.svg";
+import "./App.css";
+import React, { useState } from "react";
+import { Message } from "./components/Message/Message";
+import { Form } from './components/Form/Form';
 
 const name = "Alex";
 
+const msgs = [
+  {
+    author: name,
+    text: "text1",
+  },
+  {
+    author: name,
+    text: "text2",
+  },
+];
+
 function App() {
-  const foo = () => {
-    alert("Hello world");
-  };
+  const [messages, setMessages] = useState(msgs);
+
+  const addMessage = (newText) => {
+    setMessages([...messages, {text: newText, author: 'author'}]);
+  } 
 
   return (
-    <div className='App'>
-      <Message name={name} number={123+10} doSmth={foo} bold={true} />
-      <Message name="Other name" number={123+100} doSmth={foo} />
+    <div className="App">
+      {messages.map((msg) => (
+        <Message text={msg.text} author={msg.author} />
+      ))}
+      {/* <button onClick={addMessage}>Add msg</button> */}
+      <Form onSubmit={addMessage} />
     </div>
   );
 }
