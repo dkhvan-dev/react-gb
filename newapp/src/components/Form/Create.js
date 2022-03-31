@@ -1,13 +1,16 @@
+import { Container, Button } from '@mui/material';
+import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import { TextField } from "@mui/material";
-import Button from "@mui/material/Button";
 
-import "./Form.styles.css";
-
-export const Form = ({ onSubmit }) => {
+export default function Create({onSubmit}) {
   const [value, setValue] = useState("");
 
   const inputRef = useRef();
+
+  const handleChange = (e) => {
+    setValue(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,27 +19,24 @@ export const Form = ({ onSubmit }) => {
     setValue("");
   };
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
-  };
-
-  useEffect(() => {
-    console.log("did mount", inputRef);
-    inputRef.current?.focus();
-
-    return () => {
-      console.log("will unmount");
-    };
-  }, []);
-
   return (
     <form onSubmit={handleSubmit}>
       {/* <input value={value} onChange={handleChange} type="text" ref={inputRef} /> */}
       {/* <input type="submit" /> */}
       <TextField value={value} onChange={handleChange} inputRef={inputRef} />
-      <Button className="mybtn" type="submit" variant="contained">
+      <Button color='secondary' type="submit" variant="contained">
         Submit
       </Button>
     </form>
-  );
-};
+
+    // <Container>
+    //   <Button
+    //     type='submit'
+    //     color='secondary'
+    //     variant='contained'
+    //   >
+    //     Submit
+    //   </Button>
+    // </Container>
+  )
+}
