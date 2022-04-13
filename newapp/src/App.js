@@ -1,72 +1,43 @@
 import "./App.css";
 import React, { useEffect, useRef, useState } from "react";
-import { Message } from "./components/Message/Message";
 import { Form } from "./components/Form/Form";
 import { AUTHORS } from "./utils/constants";
 import { MessageList } from "./components/MessageList/MessageList";
-import {createTheme, ThemeProvider} from '@mui/material';
-import {purple} from '@mui/material/colors';
-import Create from './components/Form/Create';
+import { ChatList } from "./components/ChatList/ChatList";
+import { BrowserRouter, Route, Routes, Link, NavLink } from "react-router-dom";
+import { Chat } from "./screens/Chat/Chat";
+
+const Home = () => <h4>Home page</h4>;
 
 function App() {
-  const [messages, setMessages] = useState([]);
-
-  const timeout = useRef();
-  const wrapperRef = useRef();
-
-  const addMessage = (newMsg) => {
-    setMessages([...messages, newMsg]);
-  };
-
-  const sendMessage = (text) => {
-    addMessage({
-      author: AUTHORS.human,
-      text,
-      id: `msg-${Date.now()}`,
-    });
-  };
-
-  useEffect(() => {
-    if (messages[messages.length - 1]?.author === AUTHORS.human) {
-      timeout.current = setTimeout(() => {
-        addMessage({
-          author: AUTHORS.robot,
-          text: "hello friend",
-          id: `msg-${Date.now()}`,
-        });
-      }, 1000);
-    }
-
-    return () => {
-      clearTimeout(timeout.current);
-    };
-  }, [messages]);
-
-  const handleScroll = () => {
-    wrapperRef.current?.scrollTo({ x: 0, y: 0 });
-  };
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#fefefe'
-      },
-      secondary: purple
-    },
-  });
-
   return (
-    <div className="App" ref={wrapperRef}>
-      <MessageList messages={messages} />
-      
-      <ThemeProvider theme={theme}>
-        <Create onSubmit={sendMessage}>
-        </Create>
-      </ThemeProvider>
-
-      {/* <Form onSubmit={sendMessage} /> */}
-      <button onClick={handleScroll}>scroll</button>
-    </div>
+    <BrowserRouter>
+      <ul>
+        <li>
+          <NavLink
+            to="/"
+            style={({ isActive }) => ({ color: isActive ? "green" : "blue" })}
+          >
+            Home
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            style={({ isActive }) => ({ color: isActive ? "green" : "blue" })}
+            to="/chat"
+          >
+            Chat
+          </NavLink>
+        </li>
+      </ul>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/chat" element={<ChatList />}>
+          <Route path=":id" element={<Chat />} />
+        </Route>
+        <Route path="*" element={<h4>404</h4>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
