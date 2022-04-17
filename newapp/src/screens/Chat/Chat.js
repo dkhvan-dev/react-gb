@@ -19,17 +19,12 @@ const chats = [
     name: "Chat3",
     id: "chat3",
   },
-  {
-    name: "Chat4",
-    id: "chat4",
-  },
 ];
 
 const initMessages = {
   chat1: [],
   chat2: [],
   chat3: [],
-  chat4: [],
 };
 
 // const name = "value";

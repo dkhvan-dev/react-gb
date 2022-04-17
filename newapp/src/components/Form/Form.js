@@ -21,12 +21,7 @@ export const Form = ({ onSubmit }) => {
   };
 
   useEffect(() => {
-    console.log("did mount", inputRef);
     inputRef.current?.focus();
-
-    return () => {
-      console.log("will unmount");
-    };
   }, []);
 
   return (
