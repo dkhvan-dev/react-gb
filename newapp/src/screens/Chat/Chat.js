@@ -6,64 +6,35 @@ import { Form } from "../../components/Form/Form";
 import { MessageList } from "../../components/MessageList/MessageList";
 import { AUTHORS } from "../../utils/constants";
 
-const chats = [
-  {
-    name: "Chat1",
-    id: "chat1",
-  },
-  {
-    name: "Chat2",
-    id: "chat2",
-  },
-  {
-    name: "Chat3",
-    id: "chat3",
-  },
-];
-
-const initMessages = {
-  chat1: [],
-  chat2: [],
-  chat3: [],
-};
-
-// const name = "value";
-
-// const obj = {
-//   name: 1,
-//   [name]: 2,
-// };
-
-// console.log(obj.name, obj.value);
-
-export function Chat() {
+export function Chat({ messages, addMessage }) {
   const { id } = useParams();
-  const [messages, setMessages] = useState(initMessages);
 
   const timeout = useRef();
   const wrapperRef = useRef();
 
-  const addMessage = (newMsg) => {
-    setMessages({ ...messages, [id]: [...messages[id], newMsg] });
-  };
-
   const sendMessage = (text) => {
-    addMessage({
-      author: AUTHORS.human,
-      text,
-      id: `msg-${Date.now()}`,
-    });
+    addMessage(
+      {
+        author: AUTHORS.human,
+        text,
+        id: `msg-${Date.now()}`,
+      },
+      id
+    );
   };
 
   useEffect(() => {
     const lastMessage = messages[id]?.[messages[id]?.length - 1];
     if (lastMessage?.author === AUTHORS.human) {
       timeout.current = setTimeout(() => {
-        addMessage({
-          author: AUTHORS.robot,
-          text: "hello friend",
-          id: `msg-${Date.now()}`,
-        });
+        addMessage(
+          {
+            author: AUTHORS.robot,
+            text: "hello friend",
+            id: `msg-${Date.now()}`,
+          },
+          id
+        );
       }, 1000);
     }
 
@@ -73,7 +44,7 @@ export function Chat() {
   }, [messages]);
 
   if (!messages[id]) {
-    return <Navigate to="/chat" replace />
+    return <Navigate to="/chat" replace />;
   }
 
   return (
