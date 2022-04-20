@@ -1,6 +1,23 @@
+import { onValue, set } from "@firebase/database";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form } from "../../components/Form/Form";
-import { setName, toggleCheckbox } from "../../store/profile/actions";
+import {
+  asdfRef,
+  auth,
+  logOut,
+  userNameRef,
+  userRef,
+  userShowNameRef,
+} from "../../services/firebase";
+import {
+  initProfileTrack,
+  setName,
+  setNameFB,
+  setShowName,
+  stopProfileTrack,
+  toggleCheckbox,
+} from "../../store/profile/actions";
 import { selectName, selectShowName } from "../../store/profile/selectors";
 import { usePrev } from "../../utils/usePrev";
 
@@ -10,20 +27,25 @@ export const Profile = ({ onLogout }) => {
   const name = useSelector(selectName);
   const showName = useSelector(selectShowName);
   const handleClick = () => {
-    dispatch(toggleCheckbox);
+    dispatch(setShowName(!showName));
   };
-
-  const prevName = usePrev(name);
-  console.log(prevName);
 
   const handleSubmit = (text) => {
-    dispatch(setName(text));
+    dispatch(setNameFB(text));
   };
+
+  useEffect(() => {
+    dispatch(initProfileTrack());
+
+    return () => {
+      dispatch(stopProfileTrack());
+    };
+  }, []);
 
   return (
     <>
       <h3>This is Profile</h3>
-      <button onClick={onLogout}>LOGOUT</button>
+      <button onClick={logOut}>LOGOUT</button>
       {showName && <span>{name}</span>}
       <button onClick={handleClick}>change show name</button>
       <Form onSubmit={handleSubmit} />
