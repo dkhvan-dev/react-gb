@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes, NavLink } from "react-router-dom";
 
 import "./App.css";
@@ -10,8 +10,6 @@ import { Home } from "./screens/Home/Home";
 import { Articles } from "./screens/Articles/Articles";
 import { PrivateRoute } from "./components/PrivateRoute/PrivateRoute";
 import { PublicRoute } from "./components/PublicRoute/PublicRoute";
-import { onAuthStateChanged } from "@firebase/auth";
-import { auth } from "./services/firebase";
 
 function App() {
   const [theme, setTheme] = useState("dark");
@@ -44,43 +42,12 @@ function App() {
     setAuthed(false);
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        handleLogin();
-      } else {
-        handleLogout();
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
 
   return (
     <ThemeContext.Provider value={{ theme, changeTheme: toggleTheme }}>
-      <button
-        onClick={() => {
-          fetch("https://simple-message-gb.herokuapp.com/message", {
-            method: "POST",
-            body: JSON.stringify({ message: "hello" }),
-          })
-            .then((r) => {
-              console.log(r);
-              if (!r.ok) {
-                throw new Error(r.status);
-              }
-              return r.json();
-            })
-            .then((res) => console.log(res))
-            .catch((e) => console.warn(e));
-        }}
-      >
-        Click
-      </button>
       <BrowserRouter>
         <ul>
           <li>
@@ -130,10 +97,6 @@ function App() {
         <Routes>
           <Route path="/" element={<PublicRoute authed={authed} />}>
             <Route path="" element={<Home onAuth={handleLogin} />} />
-            <Route
-              path="signup"
-              element={<Home onAuth={handleLogin} isSignUp />}
-            />
           </Route>
 
           <Route path="/profile" element={<PrivateRoute authed={authed} />}>

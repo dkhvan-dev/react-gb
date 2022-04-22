@@ -5,9 +5,11 @@ import App from "./App";
 import { Provider } from "react-redux";
 import { persistor, store } from "./store";
 import { PersistGate } from "redux-persist/integration/react";
+import { Parent } from "./components/Example/Example";
 // import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
+  // <Parent />,
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <App />

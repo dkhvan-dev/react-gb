@@ -44,19 +44,3 @@ export const addMessageWithReply = (newMsg, chatId) => (dispatch, getState) => {
     }, 1000);
   }
 };
-
-/*
-export const initMsgsTracking = () => (dispatch) => {
-  onValue(msgsRef, (snapshot) => {
-    const newMsgs = {};
-
-    snapshot.forEach((chatMsgsSnap) => {
-      newMsgs[chatMsgsSnap.key] = Object.values(
-        chatMsgsSnap.val().messageList || {}
-      );
-    });
-
-    dispatch(setMsgs(newMsgs));
-  });
-};
-*/
